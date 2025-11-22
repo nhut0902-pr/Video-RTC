@@ -19,7 +19,39 @@ const currentUser = JSON.parse(userStr);
 const API_URL = window.location.origin;
 
 // Socket.io connection - use backend URL in production
-const socket = io(import.meta.env.VITE_BACKEND_URL || window.location.origin);
+const socket = io(import.meta.env.VITE_BACKEND_URL || window.location.origin, {
+  reconnection: true,
+  reconnectionAttempts: 10,
+  reconnectionDelay: 1000,
+  timeout: 20000
+});
+
+// Show connection status
+const connectionStatus = document.getElementById("connection-status");
+if (connectionStatus) {
+  connectionStatus.textContent = "Đang kết nối server...";
+  connectionStatus.style.color = "#fbbf24"; // Yellow
+}
+
+socket.on("connect", () => {
+  console.log("Connected to server");
+  if (connectionStatus) {
+    connectionStatus.textContent = "Đã kết nối server";
+    connectionStatus.style.color = "#34d399"; // Green
+    setTimeout(() => {
+      connectionStatus.textContent = "Chưa kết nối"; // Reset to default state for call status
+      connectionStatus.style.color = "";
+    }, 3000);
+  }
+});
+
+socket.on("connect_error", () => {
+  console.log("Connection error - Server might be sleeping");
+  if (connectionStatus) {
+    connectionStatus.textContent = "Đang đánh thức server... (vui lòng đợi 30s)";
+    connectionStatus.style.color = "#f87171"; // Red
+  }
+});
 const localVideo = document.getElementById("local-video");
 const remoteVideo = document.getElementById("remote-video");
 const remotePlaceholder = document.getElementById("remote-placeholder");

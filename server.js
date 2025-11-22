@@ -35,6 +35,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/calls', callHistoryRoutes);
 
+// Health check endpoint for Render keep-alive
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // Static files - MUST be after API routes
 app.use(express.static(path.join(__dirname)));
 
