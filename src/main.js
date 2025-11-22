@@ -18,7 +18,8 @@ if (!token || !userStr) {
 const currentUser = JSON.parse(userStr);
 const API_URL = window.location.origin;
 
-const socket = io();
+// Socket.io connection - use backend URL in production
+const socket = io(import.meta.env.VITE_BACKEND_URL || window.location.origin);
 const localVideo = document.getElementById("local-video");
 const remoteVideo = document.getElementById("remote-video");
 const remotePlaceholder = document.getElementById("remote-placeholder");
