@@ -10,6 +10,10 @@
         {
             "source": "/socket.io/:path*",
             "destination": "https://video-rtc.onrender.com/socket.io/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ],
     "headers": [
